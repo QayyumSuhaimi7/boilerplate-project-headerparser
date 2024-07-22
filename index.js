@@ -19,15 +19,12 @@ app.get('/', function (req, res) {
   res.sendFile(__dirname + '/views/index.html');
 });
 
-app.get('/api/whoami', function (req, res){
-  const ipaddress = req.headers['x-forwarded-for']?.split(',')[0] || req.connection.remoteAddress;
-  const cleanIp = ipaddress.startsWith('::ffff:') ? ipaddress : `::ffff:${ipaddress}`;
-
-  console.log('IP Address:', cleanIp);
-  console.log('Language:', req.headers['accept-language']);
-  console.log('Software:', req.headers['user-agent']);
-
-  res.json({ ipaddress: cleanIp, language: req.headers['accept-language'], software: req.headers['user-agent'] });
+app.get('/api/whoami', function (req, res) {
+  res.json({
+    ipaddress: req.headers['x-forwarded-for'] || req.connection.remoteAddress,
+    language: req.headers['accept-language'],
+    software: req.headers['user-agent']
+  });
 });
 
 // listen for requests :)
